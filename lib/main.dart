@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager_rest_api/ui/screens/login_page.dart';
+import 'package:task_manager_rest_api/ui/screens/login_screen.dart';
 
-import 'ui/screens/splash_page.dart';
+import 'ui/screens/splash_screen.dart';
 
 void main() {
   runApp(MyApp());
