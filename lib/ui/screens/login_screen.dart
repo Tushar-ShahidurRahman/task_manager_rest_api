@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager_rest_api/ui/screens/signUp_screen.dart';
+import 'package:task_manager_rest_api/ui/screens/verify_with_email_screen.dart';
 import 'package:task_manager_rest_api/ui/utils/text_style.dart';
 import 'package:task_manager_rest_api/ui/widgets/screen_background_widget.dart';
 
@@ -52,7 +53,10 @@ class _LoginPageState extends State<LoginPage> {
                           padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (
+                              context) => const VerifyWithEmailScreen(),));
+                        },
                         child: const Text(
                           'Forgot password?',
                           style: TextStyle(color: Colors.grey),
