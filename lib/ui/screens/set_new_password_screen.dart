@@ -32,13 +32,25 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                   style: screenSubtitleTextStyle),
               const SizedBox(height: 10),
               AppTextFieldWidget(
-                  hintText: 'Password', controller: TextEditingController()),
+                  obscureText: true,
+                  hintText: 'Password',
+                  controller: TextEditingController()),
               const SizedBox(height: 10),
               AppTextFieldWidget(
+                  obscureText: true,
                   hintText: 'Confirm Password',
                   controller: TextEditingController()),
               const SizedBox(height: 10),
-              AppElevatedButton(child: const Text('Confirm'), onTap: () {}),
+              AppElevatedButton(
+                  child: const Text('Confirm'),
+                  onTap: () {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LoginScreen(),
+                        ),
+                        (route) => false);
+                  }),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -55,9 +67,9 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const LoginPage(),
+                              builder: (context) => const LoginScreen(),
                             ),
-                                (route) => false);
+                            (route) => false);
                       }),
                 ],
               )
