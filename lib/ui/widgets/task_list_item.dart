@@ -40,7 +40,9 @@ class TaskListItem extends StatelessWidget {
               children: [
                 Chip(
                   label: Text(type),
+
                   backgroundColor: Colors.blue,
+                  // backgroundColor:
                 ),
                 const Spacer(),
                 IconButton(
