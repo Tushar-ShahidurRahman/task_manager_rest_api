@@ -38,7 +38,7 @@ class TaskListItem extends StatelessWidget {
             const SizedBox(height: 6),
             Row(
               children: [
-                // CustomizedChipWidget(type: type, backgroundColor: type == 'New' ? Colors.blue : Colors.greenAccent,),
+                CustomizedChipWidget(type: type, backgroundColor: type == 'New' ? Colors.blue : Colors.greenAccent,),
                 // CustomizedChipWidget(
                 //   type: type,
                 //   // backgroundColor: backgroundColor,
