@@ -19,6 +19,7 @@ class AppTextFieldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       controller: controller,
       maxLines: maxLines ?? 1,
       validator: (value) {
