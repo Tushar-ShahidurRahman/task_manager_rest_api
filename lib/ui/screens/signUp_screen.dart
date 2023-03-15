@@ -100,43 +100,47 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                   ),
                   const SizedBox(height: 10),
-                  AppElevatedButton(
-                      child: _inProgress
-                          ? const CircularProgressIndicator(
-                              color: Colors.white,
-                            )
-                          : const Icon(Icons.arrow_circle_right_rounded),
-                      onTap: () async {
-                        if (_formkey.currentState!.validate()) {
-                          _inProgress = true;
-                          setState(() {});
+                  _inProgress
+                      ? const Center(
+                        child: CircularProgressIndicator(
+                            color: Colors.green,
+                          ),
+                      )
+                      : AppElevatedButton(
+                          child: const Icon(Icons.arrow_circle_right_rounded),
+                          onTap: () async {
+                            if (_formkey.currentState!.validate()) {
+                              _inProgress = true;
+                              setState(() {});
 
-                          final result = await NetworkUtils.postMethod(
-                            Urls.registrationUrl,
-                            body: {
-                              'email': emailETController.text.trim(),
-                              'password': passwordETController.text,
-                              'mobile': mobileETController.text.trim(),
-                              'firstName': firstNameETController.text.trim(),
-                              'lastName': lastNameETController.text.trim(),
-                            },
-                          );
-                          _inProgress = false;
-                          setState(() {});
-                          if (result != null && result['status'] == 'success') {
-                            emailETController.clear();
-                            passwordETController.clear();
-                            mobileETController.clear();
-                            firstNameETController.clear();
-                            lastNameETController.clear();
-                            showSnackBarMessage(
-                                context, 'Registration Successful!');
-                          } else {
-                            showSnackBarMessage(context,
-                                'Registration Failed, Try again', true);
-                          }
-                        }
-                      }),
+                              final result = await NetworkUtils.postMethod(
+                                Urls.registrationUrl,
+                                body: {
+                                  'email': emailETController.text.trim(),
+                                  'password': passwordETController.text,
+                                  'mobile': mobileETController.text.trim(),
+                                  'firstName':
+                                      firstNameETController.text.trim(),
+                                  'lastName': lastNameETController.text.trim(),
+                                },
+                              );
+                              _inProgress = false;
+                              setState(() {});
+                              if (result != null &&
+                                  result['status'] == 'success') {
+                                emailETController.clear();
+                                passwordETController.clear();
+                                mobileETController.clear();
+                                firstNameETController.clear();
+                                lastNameETController.clear();
+                                showSnackBarMessage(
+                                    context, 'Registration Successful!');
+                              } else {
+                                showSnackBarMessage(context,
+                                    'Registration Failed, Try again', true);
+                              }
+                            }
+                          }),
                   const SizedBox(
                     height: 16,
                   ),
