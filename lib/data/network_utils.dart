@@ -6,7 +6,8 @@ import 'package:http/http.dart' as http;
 class NetworkUtils {
 //getMethond
 
-  static Future<dynamic> getMethod(String url, {VoidCallback? onUnAuthorized}) async {
+  static Future<dynamic> getMethod(String url,
+      {VoidCallback? onUnAuthorized}) async {
     try {
       final http.Response response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
@@ -22,17 +23,22 @@ class NetworkUtils {
   }
 
   // postMethod
-  static Future<dynamic> postMethod(String url, {Map<String, String>? body, VoidCallback? onUnAuthorized}) async {
+  static Future<dynamic> postMethod(String url,
+      {Map<String, String>? body, VoidCallback? onUnAuthorized, String? token,}) async {
     try {
       final http.Response response = await http.post(
         Uri.parse(url),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+          "Content-Type": "application/json",
+          'token': token?? '',
+        },
         body: jsonEncode(body),
       );
+      print(response.body);
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else if (response.statusCode == 401) {
-        if(onUnAuthorized != null) {
+        if (onUnAuthorized != null) {
           onUnAuthorized();
         }
       } else {
