@@ -27,6 +27,10 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        Navigator.pop(context);
+      },
+      child: const Icon(Icons.minimize),),
       body: SafeArea(
           child: Column(
         children: [
