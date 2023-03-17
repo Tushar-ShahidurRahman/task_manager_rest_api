@@ -5,4 +5,5 @@ static String loginUrl = '$baseUrl/login';
 static String registrationUrl = '$baseUrl/registration';
 static String createNewTaskUrl = '$baseUrl/createTask';
 static String getNewTaskUrl = '$baseUrl/listTaskByStatus/New';
+static String getCompletedTaskUrl = '$baseUrl/listTaskByStatus/Completed';
 }
