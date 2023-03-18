@@ -5,6 +5,7 @@ import 'package:task_manager_rest_api/data/network_utils.dart';
 import 'package:task_manager_rest_api/data/urls.dart';
 import 'package:task_manager_rest_api/ui/utils/snackbar_message.dart';
 import 'package:task_manager_rest_api/ui/widgets/screen_background_widget.dart';
+import 'package:task_manager_rest_api/ui/widgets/status_change_bottom_sheet.dart';
 
 import '../widgets/task_list_item.dart';
 
@@ -26,16 +27,19 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
   }
 
   Future<void> getAllCompletedTask() async {
+    _inProgress = true;
+    setState(() {});
     final response = await NetworkUtils.getMethod(Urls.getCompletedTaskUrl,
         token: AuthUtils.token);
 
     if (response != null) {
-      _inProgress = true;
-      setState(() {});
       completedTaskModel = TaskModel.fromJson(response);
     } else {
-      showSnackBarMessage(context,
-          'Could not fetch any completed task, please try again', true);
+      // Solved async methods with build context problem.
+      if (mounted) {
+        showSnackBarMessage(context,
+            'Could not fetch any completed task, please try again', true);
+      }
     }
     _inProgress = false;
     setState(() {});
@@ -62,7 +66,13 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                       date: completedTaskModel.data?[index].createdDate ??
                           'Unknown',
                       type: 'Completed',
-                      onEditPress: () {},
+                      onEditPress: () {
+                        showChangedTaskStatus(
+                          currentValue: 'Completed',
+                          completedTaskModel.data?[index].sId ?? '',
+                          onTaskChangeCompleted: () {},
+                        );
+                      },
                       onDeletePress: () {},
                     );
                   },

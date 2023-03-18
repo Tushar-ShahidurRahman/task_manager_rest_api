@@ -3,10 +3,12 @@ import 'package:task_manager_rest_api/data/auth_utils.dart';
 import 'package:task_manager_rest_api/data/model/task_model.dart';
 import 'package:task_manager_rest_api/data/network_utils.dart';
 import 'package:task_manager_rest_api/ui/utils/snackbar_message.dart';
+import 'package:task_manager_rest_api/ui/widgets/app_elevated_button.dart';
 import 'package:task_manager_rest_api/ui/widgets/screen_background_widget.dart';
 
 import '../../data/urls.dart';
 import '../widgets/dashboard_item.dart';
+import '../widgets/status_change_bottom_sheet.dart';
 import '../widgets/task_list_item.dart';
 
 class NewTasksScreen extends StatefulWidget {
@@ -31,17 +33,19 @@ class _NewTasksScreenState extends State<NewTasksScreen> {
   }
 
   Future<void> getAllNewTask() async {
+    _inProgress = true;
+    setState(() {});
     final response = await NetworkUtils.getMethod(Urls.getNewTaskUrl,
         token: AuthUtils.token);
 
     if (response != null) {
-      _inProgress = true;
-      setState(() {});
       //  i have to save the result some where. Maybe inside a class or a list.
       newTaskModel = TaskModel.fromJson(response);
     } else {
-      showSnackBarMessage(
-          context, 'Could not fetch new task. please try again', true);
+      if (mounted) {
+        showSnackBarMessage(
+            context, 'Could not fetch new task. please try again', true);
+      }
     }
     _inProgress = false;
     setState(() {});
@@ -53,26 +57,28 @@ class _NewTasksScreenState extends State<NewTasksScreen> {
       child: Column(
         children: [
           Row(
-            children:  [
+            children: [
               Expanded(
                 child: DashboardItem(
                   numberOfTasks: newTaskModel.data?.length ?? 0,
                   typeOfTasks: 'New task',
                 ),
               ),
-              Expanded(
+              const Expanded(
                 child: DashboardItem(
-                  numberOfTasks: 09,
+                  // numberOfTasks: completedTaskModel.data?.length ?? 0,
+                  numberOfTasks: 13,
+
                   typeOfTasks: 'Completed task',
                 ),
               ),
-              Expanded(
+              const Expanded(
                 child: DashboardItem(
                   numberOfTasks: 12,
                   typeOfTasks: 'Cancelled task',
                 ),
               ),
-              Expanded(
+              const Expanded(
                 child: DashboardItem(
                   numberOfTasks: 12,
                   typeOfTasks: 'In progress task',
@@ -81,33 +87,44 @@ class _NewTasksScreenState extends State<NewTasksScreen> {
             ],
           ),
           Expanded(
-              child: _inProgress
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  :
-                    RefreshIndicator(
-                      onRefresh: () async {
-                        getAllNewTask();
-                      },
-                      child: ListView.builder(
-                        reverse: true,
-                          itemCount: newTaskModel.data?.length ?? 0,
-                          itemBuilder: (BuildContext context, int index) {
-                            return TaskListItem(
-                              subject: newTaskModel.data?[index].title ?? 'Unknown',
-                              description: newTaskModel.data?[index].description ?? 'Unknown',
-                              date: newTaskModel.data?[index].createdDate ?? 'Unknown',
-                              type: 'New',
-                              onEditPress: () {},
-                              onDeletePress: () {},
+            child: _inProgress
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : RefreshIndicator(
+                    onRefresh: () async {
+                      getAllNewTask();
+                    },
+                    child: ListView.builder(
+                      reverse: true,
+                      itemCount: newTaskModel.data?.length ?? 0,
+                      itemBuilder: (BuildContext context, int index) {
+                        return TaskListItem(
+                          subject: newTaskModel.data?[index].title ?? 'Unknown',
+                          description: newTaskModel.data?[index].description ??
+                              'Unknown',
+                          date: newTaskModel.data?[index].createdDate ??
+                              'Unknown',
+                          type: 'New',
+                          onEditPress: () {
+                            showChangedTaskStatus(currentValue: 'New',
+                              newTaskModel.data?[index].sId ?? '',
+                              onTaskChangeCompleted: () {
+                                getAllNewTask();
+                              },
                             );
                           },
-                        ),
+                          onDeletePress: () {},
+                        );
+                      },
                     ),
                   ),
+          ),
         ],
       ),
     );
   }
+
+//  showTaskChangeId method was here... Now i changed its location to lib/ui/widgets.
+// because i want to call it from other pages too... So, i made it's existence global.
 }
