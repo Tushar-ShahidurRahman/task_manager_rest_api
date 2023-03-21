@@ -23,6 +23,7 @@ class UserProfileTileWidget extends StatelessWidget {
         tileColor: Colors.green,
         leading: const CircleAvatar(
           radius: 18,
+          // child: AuthUtils.profilePic,
           child: Icon(Icons.person),
         //   Image.network(
         //       'https://avatars.githubusercontent.com/u/46148235?s=96&v=4'),

@@ -16,8 +16,8 @@ class NetworkUtils {
       final http.Response response = await http.get(Uri.parse(url),
         headers: {
           "Content-Type": "application/json",
-          // 'token': AuthUtils.token ?? '',
-          'token': token ?? '',
+          'token': AuthUtils.token ?? '',
+          // 'token': token ?? '',
         },
       );
 
@@ -40,18 +40,18 @@ class NetworkUtils {
 
   // postMethod
   static Future<dynamic> postMethod(
-    String url, {
+    String url,  {
     Map<String, String>? body,
     VoidCallback? onUnAuthorized,
-    String? token,
+        String? token,
   }) async {
     try {
       final http.Response response = await http.post(
         Uri.parse(url),
         headers: {
           "Content-Type": "application/json",
-          // 'token': AuthUtils.token ?? '',
-          'token': token ?? '',
+          'token': AuthUtils.token ?? '',
+          // 'token': token ?? '',
         },
         body: jsonEncode(body),
       );

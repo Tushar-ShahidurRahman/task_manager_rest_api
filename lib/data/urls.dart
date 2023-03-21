@@ -6,5 +6,6 @@ static String registrationUrl = '$baseUrl/registration';
 static String createNewTaskUrl = '$baseUrl/createTask';
 static String getNewTaskUrl = '$baseUrl/listTaskByStatus/New';
 static String getCompletedTaskUrl = '$baseUrl/listTaskByStatus/Completed';
+static String updateProfileUrl = '$baseUrl/profileUpdate';
 static String updateTaskStatusUrl({String? taskId, String? status}) => '$baseUrl/updateTaskStatus/$taskId/$status';
 }

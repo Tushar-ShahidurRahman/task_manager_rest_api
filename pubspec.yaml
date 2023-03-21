@@ -39,6 +39,7 @@ dependencies:
   pin_code_fields: ^7.4.0
   http: ^0.13.5
   shared_preferences: ^2.0.18
+  image_picker: ^0.8.7
 
 dev_dependencies:
   flutter_test:

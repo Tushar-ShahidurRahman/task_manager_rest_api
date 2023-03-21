@@ -6,6 +6,7 @@ class AppTextFieldWidget extends StatelessWidget {
   final bool? obscureText;
   final int? maxLines;
   final Function(String?)? validator;
+  final bool? readOnly;
 
   const AppTextFieldWidget({
     super.key,
@@ -13,7 +14,7 @@ class AppTextFieldWidget extends StatelessWidget {
     required this.controller,
     this.obscureText,
     this.maxLines,
-    this.validator,
+    this.validator, this.readOnly,
   });
 
   @override
@@ -21,6 +22,7 @@ class AppTextFieldWidget extends StatelessWidget {
     return TextFormField(
       autovalidateMode: AutovalidateMode.onUserInteraction,
       controller: controller,
+      readOnly: readOnly ?? false,
       maxLines: maxLines ?? 1,
       validator: (value) {
         if (validator != null) {
