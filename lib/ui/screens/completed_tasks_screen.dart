@@ -70,7 +70,9 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                         showChangedTaskStatus(
                           currentValue: 'Completed',
                           completedTaskModel.data?[index].sId ?? '',
-                          onTaskChangeCompleted: () {},
+                          onTaskChangeCompleted: () {
+                            getAllCompletedTask();
+                          },
                         );
                       },
                       onDeletePress: () {},

@@ -159,9 +159,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           _inProgress
                               ? const Center(
                                   child: CircularProgressIndicator(
-                                    color: Colors.green,
-                                  ),
-                                )
+                                  color: Colors.green,
+                                ))
                               : AppElevatedButton(
                                   child: const Icon(
                                       Icons.arrow_circle_right_rounded),

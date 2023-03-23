@@ -6,6 +6,8 @@ static String registrationUrl = '$baseUrl/registration';
 static String createNewTaskUrl = '$baseUrl/createTask';
 static String getNewTaskUrl = '$baseUrl/listTaskByStatus/New';
 static String getCompletedTaskUrl = '$baseUrl/listTaskByStatus/Completed';
+static String getCancelledTaskUrl = '$baseUrl/listTaskByStatus/Cancelled';
+static String getProgressTaskUrl = '$baseUrl/listTaskByStatus/Progress';
 static String updateProfileUrl = '$baseUrl/profileUpdate';
 static String recoverResetPasswordUrl = '$baseUrl/RecoverResetPass';
 //In main app String in not nullable. I have to check that out.

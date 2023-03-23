@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'customized_chip_widget.dart';
+
 class TaskListItem extends StatelessWidget {
   const TaskListItem({
     super.key,
@@ -38,11 +40,11 @@ class TaskListItem extends StatelessWidget {
             const SizedBox(height: 6),
             Row(
               children: [
-                CustomizedChipWidget(type: type, backgroundColor: type == 'New' ? Colors.blue : Colors.greenAccent,),
-                // CustomizedChipWidget(
-                //   type: type,
-                //   // backgroundColor: backgroundColor,
-                // ),
+                // CustomizedChipWidget(type: type, backgroundColor: type == 'New' ? Colors.blue : Colors.greenAccent,),
+                CustomizedChipWidget(
+                  type: type,
+                  // backgroundColor: backgroundColor,
+                ),
                 const Spacer(),
                 IconButton(
                     onPressed: onEditPress, icon: const Icon(Icons.edit)),
@@ -58,61 +60,4 @@ class TaskListItem extends StatelessWidget {
   }
 }
 
-    class CustomizedChipWidget extends StatelessWidget {
-      // var backgroundColor;
 
-      const CustomizedChipWidget({
-        super.key,
-        required this.type,
-        required this.backgroundColor,
-      });
-
-      final String type;
-      final Color backgroundColor;
-
-      @override
-      Widget build(BuildContext context) {
-        return Chip(label: Text(type), backgroundColor: backgroundColor);}
-          // ),
-
-          // showColoredChip(Widget chip) {
-          //   if (type == 'New') {
-          //         return Colors.blue;
-          //     } else if (type == 'Completed') {
-          //         return Colors.green;
-          //     } else if (type == 'Cancelled') {
-          //     return Colors.grey;
-          //     } else {
-          //     return Colors.red;
-          //     }
-          // }
-
-          //   backgroundColor: if (type == 'New') {
-          //     return Colors.blue;
-          // } else if (type == 'Completed') {
-          //     return Colors.green;
-          // } else if (type == 'Cancelled') {
-          // return Colors.grey;
-          // } else {
-          // return Colors.red;
-          // }
-          // return Color
-      //   );
-      // }
-
-    // showColoredChip( type) {
-    // final Color backgroundColor;
-    // if (type == 'New') {
-    // backgroundColor = Colors.blue;
-    // } else if (type == 'Completed') {
-    // backgroundColor = Colors.green;
-    // } else if (type == 'Cancelled') {
-    // backgroundColor = Colors.grey;
-    // } else {
-    // backgroundColor = Colors.red;
-    // }
-    // return backgroundColor;
-    // }
-    // }
-
-    }
