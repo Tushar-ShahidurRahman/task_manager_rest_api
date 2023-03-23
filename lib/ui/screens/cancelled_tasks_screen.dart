@@ -45,27 +45,39 @@ class _CancelledTasksScreenState extends State<CancelledTasksScreen> {
   @override
   Widget build(BuildContext context) {
     return ScreenBackground(
-        child: ListView.builder(
-      itemCount: cancelledTasks.data?.length ?? 0,
-      itemBuilder: (BuildContext context, int index) {
-        return TaskListItem(
-          subject: cancelledTasks.data?[index].title ?? 'Unknown',
-          description: cancelledTasks.data?[index].description ?? 'Unknown',
-          date: cancelledTasks.data?[index].createdDate ?? 'Unknown',
-          type: 'Cancelled',
-          onEditPress: () {
-            showChangedTaskStatus(
-              cancelledTasks.data?[index].sId ?? 'Unknown',
-              currentValue: 'Cancelled',
-              onTaskChangeCompleted: () {
-                getAllCancelledTasks();
-              },
-            );
-          },
-          onDeletePress: () {},
-        );
-      },
-    ));
+        child: _inProgress
+            ? const Center(
+                child: CircularProgressIndicator(
+                color: Colors.green,
+              ))
+            : RefreshIndicator(
+                onRefresh: () async {
+                  getAllCancelledTasks();
+                },
+                child: ListView.builder(
+                  itemCount: cancelledTasks.data?.length ?? 0,
+                  itemBuilder: (BuildContext context, int index) {
+                    return TaskListItem(
+                      subject: cancelledTasks.data?[index].title ?? 'Unknown',
+                      description:
+                          cancelledTasks.data?[index].description ?? 'Unknown',
+                      date:
+                          cancelledTasks.data?[index].createdDate ?? 'Unknown',
+                      type: 'Cancelled',
+                      onEditPress: () {
+                        showChangedTaskStatus(
+                          cancelledTasks.data?[index].sId ?? 'Unknown',
+                          currentValue: 'Cancelled',
+                          onTaskChangeCompleted: () {
+                            getAllCancelledTasks();
+                          },
+                        );
+                      },
+                      onDeletePress: () {},
+                    );
+                  },
+                ),
+              ));
     ;
   }
 }
