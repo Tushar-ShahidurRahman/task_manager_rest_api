@@ -58,13 +58,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
       // _emailETController.clear();
       // _passwordETController.clear();
-
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const MainBottomNavBar(),
-          ),
-          (route) => false);
+      if (mounted) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const MainBottomNavBar(),
+            ),
+            (route) => false);
+      }
     }
   }
 
@@ -113,7 +114,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 12),
                   if (_inProgress)
-                    const Center(child: CircularProgressIndicator(color: Colors.green))
+                    const Center(
+                        child: CircularProgressIndicator(color: Colors.green))
                   else
                     AppElevatedButton(
                       onTap: () async {

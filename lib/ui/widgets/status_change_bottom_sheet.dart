@@ -9,7 +9,7 @@ import 'app_elevated_button.dart';
 
 showChangedTaskStatus(String taskId, {required String currentValue,  required VoidCallback onTaskChangeCompleted}) {
   String status = currentValue;
-  bool _inProgress = false;
+  // bool _inProgress = false;
 
   showModalBottomSheet(
     context: TaskManagerApp.navigatorGlobalKey.currentContext!,
@@ -53,22 +53,27 @@ showChangedTaskStatus(String taskId, {required String currentValue,  required Vo
               Padding(
                 padding:
                 const EdgeInsets.symmetric(vertical: 10, horizontal: 26),
-                child: AppElevatedButton(
+          // _inProgress ? const Center(child: CircularProgressIndicator(color: Colors.green)):
+          child: AppElevatedButton(
                     child: const Text('Change Task Type'),
                     onTap: () async {
                       // should i use inProgress flag here?
-                      _inProgress = true;
-                      changeState(() {});
+                      // _inProgress = true;
+                      // changeState(() {});
                       final response = await NetworkUtils.getMethod(
-                          token: AuthUtils.token,
+                          // token: AuthUtils.token,
                           Urls.updateTaskStatusUrl(
                               taskId: taskId, status: status));
+                      // _inProgress = false;
+                      // changeState(() {});
                       if (response != null) {
                         // getAllNewTask();
-                        //How can i solve this method called from other pages?
+                        //How can i solve [this method(showChangedTaskStatus) called from other pages]?
                         // should i use voidCallback? I think yes. And then pass it here.
                         onTaskChangeCompleted();
+                        // if (mounted) {
                         Navigator.pop(context);
+                        // }
                       } else {
                         // if (mounted) {
                           showSnackBarMessage(
@@ -76,10 +81,9 @@ showChangedTaskStatus(String taskId, {required String currentValue,  required Vo
                             TaskManagerApp.navigatorGlobalKey.currentContext!,
                               'Could not change task status, please try again',
                               true);
-                        // }
-                      }
-                      _inProgress = false;
-                      changeState(() {});
+                        }
+                      // }
+
                     }),
               ),
             ],

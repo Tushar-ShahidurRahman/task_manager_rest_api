@@ -19,11 +19,11 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   bool _inProgress = false;
 
-  final TextEditingController emailETController = TextEditingController();
-  final TextEditingController firstNameETController = TextEditingController();
-  final TextEditingController lastNameETController = TextEditingController();
-  final TextEditingController mobileETController = TextEditingController();
-  final TextEditingController passwordETController = TextEditingController();
+  final TextEditingController _emailETController = TextEditingController();
+  final TextEditingController _firstNameETController = TextEditingController();
+  final TextEditingController _lastNameETController = TextEditingController();
+  final TextEditingController _mobileETController = TextEditingController();
+  final TextEditingController _passwordETController = TextEditingController();
 
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
@@ -45,7 +45,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(height: 25),
                   AppTextFieldWidget(
                     hintText: 'Email',
-                    controller: emailETController,
+                    controller: _emailETController,
                     validator: (value) {
                       // if (value != null && value.isEmpty)
                       if (value?.isEmpty ?? true) {
@@ -57,7 +57,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(height: 10),
                   AppTextFieldWidget(
                     hintText: 'First Name',
-                    controller: firstNameETController,
+                    controller: _firstNameETController,
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
                         return 'Enter your First Name';
@@ -68,7 +68,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(height: 10),
                   AppTextFieldWidget(
                     hintText: 'Last Name',
-                    controller: lastNameETController,
+                    controller: _lastNameETController,
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
                         return 'Enter your Last Name';
@@ -79,7 +79,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(height: 10),
                   AppTextFieldWidget(
                     hintText: 'Mobile',
-                    controller: mobileETController,
+                    controller: _mobileETController,
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
                         return 'Enter your mobile number';
@@ -90,7 +90,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(height: 10),
                   AppTextFieldWidget(
                     hintText: 'Password',
-                    controller: passwordETController,
+                    controller: _passwordETController,
                     validator: (value) {
                       if ((value?.isEmpty ?? true) &&
                           ((value?.length ?? 0) < 6)) {
@@ -102,10 +102,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(height: 10),
                   _inProgress
                       ? const Center(
-                        child: CircularProgressIndicator(
+                          child: CircularProgressIndicator(
                             color: Colors.green,
                           ),
-                      )
+                        )
                       : AppElevatedButton(
                           child: const Icon(Icons.arrow_circle_right_rounded),
                           onTap: () async {
@@ -116,28 +116,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               final result = await NetworkUtils.postMethod(
                                 Urls.registrationUrl,
                                 body: {
-                                  'email': emailETController.text.trim(),
-                                  'password': passwordETController.text,
-                                  'mobile': mobileETController.text.trim(),
+                                  'email': _emailETController.text.trim(),
+                                  'password': _passwordETController.text,
+                                  'mobile': _mobileETController.text.trim(),
                                   'firstName':
-                                      firstNameETController.text.trim(),
-                                  'lastName': lastNameETController.text.trim(),
+                                      _firstNameETController.text.trim(),
+                                  'lastName': _lastNameETController.text.trim(),
                                 },
                               );
                               _inProgress = false;
                               setState(() {});
                               if (result != null &&
                                   result['status'] == 'success') {
-                                emailETController.clear();
-                                passwordETController.clear();
-                                mobileETController.clear();
-                                firstNameETController.clear();
-                                lastNameETController.clear();
-                                showSnackBarMessage(
-                                    context, 'Registration Successful!');
+                                _emailETController.clear();
+                                _passwordETController.clear();
+                                _mobileETController.clear();
+                                _firstNameETController.clear();
+                                _lastNameETController.clear();
+                                if (mounted) {
+                                  showSnackBarMessage(
+                                      context, 'Registration Successful!');
+                                }
                               } else {
-                                showSnackBarMessage(context,
-                                    'Registration Failed, Try again', true);
+                                if (mounted) {
+                                  showSnackBarMessage(context,
+                                      'Registration Failed, Try again', true);
+                                }
                               }
                             }
                           }),
