@@ -4,6 +4,7 @@ import 'package:task_manager_rest_api/data/model/task_model.dart';
 import 'package:task_manager_rest_api/data/network_utils.dart';
 import 'package:task_manager_rest_api/data/urls.dart';
 import 'package:task_manager_rest_api/ui/utils/snackbar_message.dart';
+import 'package:task_manager_rest_api/ui/widgets/delete_task_alartbox.dart';
 import 'package:task_manager_rest_api/ui/widgets/screen_background_widget.dart';
 import 'package:task_manager_rest_api/ui/widgets/status_change_bottom_sheet.dart';
 
@@ -26,6 +27,11 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
     getAllCompletedTask();
   }
 
+  int getCompletedTaskCount() {
+    int sum = completedTaskModel.data?.length ?? 0;
+    return sum;
+  }
+
   Future<void> getAllCompletedTask() async {
     _inProgress = true;
     setState(() {});
@@ -34,6 +40,8 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
 
     if (response != null) {
       completedTaskModel = TaskModel.fromJson(response);
+      setState(() {
+      });
     } else {
       // Solved async methods with build context problem.
       if (mounted) {
@@ -75,7 +83,12 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                           },
                         );
                       },
-                      onDeletePress: () {},
+                      onDeletePress: () {
+                        deleteTask(
+                          taskId: completedTaskModel.data?[index].sId ?? 'Unknown',
+                          onTaskDeleted: () => getAllCompletedTask(),
+                        );
+                      },
                     );
                   },
                 ),

@@ -3,6 +3,7 @@ import 'package:task_manager_rest_api/data/model/task_model.dart';
 import 'package:task_manager_rest_api/data/network_utils.dart';
 import 'package:task_manager_rest_api/data/urls.dart';
 import 'package:task_manager_rest_api/ui/utils/snackbar_message.dart';
+import 'package:task_manager_rest_api/ui/widgets/delete_task_alartbox.dart';
 import 'package:task_manager_rest_api/ui/widgets/status_change_bottom_sheet.dart';
 
 import '../widgets/screen_background_widget.dart';
@@ -46,37 +47,44 @@ class _InProgressTasksScreenState extends State<InProgressTasksScreen> {
     return ScreenBackground(
         child: _inProgress
             ? const Center(
-            child: CircularProgressIndicator(
-              color: Colors.green,
-            ))
+                child: CircularProgressIndicator(
+                color: Colors.green,
+              ))
             : RefreshIndicator(
-          onRefresh: () async {
-            getAllProgressTask();
-          },
-          child: ListView.builder(
-            itemCount: progressTaskModel.data?.length ?? 0,
-            itemBuilder: (BuildContext context, int index) {
-              return TaskListItem(
-                subject:
-                progressTaskModel.data?[index].title ?? 'Unknown',
-                description: progressTaskModel.data?[index].description ??
-                    'Unknown',
-                date: progressTaskModel.data?[index].createdDate ??
-                    'Unknown',
-                type: 'Progress',
-                onEditPress: () {
-                  showChangedTaskStatus(
-                    progressTaskModel.data?[index].sId ?? 'Unknown',
-                    currentValue: 'Progress',
-                    onTaskChangeCompleted: () {
-                      getAllProgressTask();
-                    },);
+                onRefresh: () async {
+                  getAllProgressTask();
                 },
-                onDeletePress: () {},
-              );
-            },
-          ),
-        ));
+                child: ListView.builder(
+                  itemCount: progressTaskModel.data?.length ?? 0,
+                  itemBuilder: (BuildContext context, int index) {
+                    return TaskListItem(
+                      subject:
+                          progressTaskModel.data?[index].title ?? 'Unknown',
+                      description: progressTaskModel.data?[index].description ??
+                          'Unknown',
+                      date: progressTaskModel.data?[index].createdDate ??
+                          'Unknown',
+                      type: 'Progress',
+                      onEditPress: () {
+                        showChangedTaskStatus(
+                          progressTaskModel.data?[index].sId ?? 'Unknown',
+                          currentValue: 'Progress',
+                          onTaskChangeCompleted: () {
+                            getAllProgressTask();
+                          },
+                        );
+                      },
+                      onDeletePress: () {
+                        deleteTask(
+                          taskId:
+                              progressTaskModel.data?[index].sId ?? 'Unknown',
+                          onTaskDeleted: () => getAllProgressTask(),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ));
     ;
   }
 }

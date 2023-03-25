@@ -72,7 +72,7 @@ showChangedTaskStatus(String taskId, {required String currentValue,  required Vo
                         // should i use voidCallback? I think yes. And then pass it here.
                         onTaskChangeCompleted();
                         // if (mounted) {
-                        Navigator.pop(context);
+                        Navigator.pop(TaskManagerApp.navigatorGlobalKey.currentContext!);
                         // }
                       } else {
                         // if (mounted) {

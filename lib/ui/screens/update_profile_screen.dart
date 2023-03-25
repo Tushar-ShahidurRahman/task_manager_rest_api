@@ -258,6 +258,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     final response =
         await NetworkUtils.postMethod(Urls.updateProfileUrl, body: bodyParams);
 
+    _inProgress = false;
+    setState(() {});
     // _inProgress = false;
     // setState(() {});
     //update cache data
@@ -275,12 +277,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       );
       // showSnackBarMessage(context, 'Profile data updated');
       // setState(() {});
-      _inProgress = false;
-      setState(() {});
+
       // Clear all controllers from here...
 
       if (mounted) {
         showSnackBarMessage(context, 'Profile data updated');
+        setState(() {});
         // Navigator.pop(context);
       }
     } else {

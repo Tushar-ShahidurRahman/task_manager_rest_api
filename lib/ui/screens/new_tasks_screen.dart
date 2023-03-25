@@ -4,7 +4,9 @@ import 'package:task_manager_rest_api/data/model/task_model.dart';
 import 'package:task_manager_rest_api/data/network_utils.dart';
 import 'package:task_manager_rest_api/ui/utils/snackbar_message.dart';
 import 'package:task_manager_rest_api/ui/widgets/app_elevated_button.dart';
+import 'package:task_manager_rest_api/ui/widgets/delete_task_alartbox.dart';
 import 'package:task_manager_rest_api/ui/widgets/screen_background_widget.dart';
+import 'package:task_manager_rest_api/ui/screens/completed_tasks_screen.dart';
 
 import '../../data/urls.dart';
 import '../widgets/dashboard_item.dart';
@@ -24,12 +26,65 @@ class _NewTasksScreenState extends State<NewTasksScreen> {
   // created this class using "json to dart". I copied "response" from the postman reply.
   TaskModel newTaskModel = TaskModel();
 
+  // TaskModel completedTaskModel = TaskModel();
+  // int? sum;
+  int? completedSum;
+  int? cancelledSum;
+  int? progressSum;
   bool _inProgress = false;
+
+  // int? taskSum;
 
   @override
   void initState() {
     super.initState();
     getAllNewTask();
+    getTaskCount();
+  }
+
+  Future<int?> getTaskCount() async {
+    final response = await NetworkUtils.getMethod(Urls.getTaskStatusCountUrl);
+    if (response != null && response['status'] == 'success') {
+      final data = response['data'];
+
+      Map<String, int> sumMap = {};
+
+      for (var item in data) {
+        String id = item['_id'];
+        int sum = item['sum'];
+        sumMap[id] = sum;
+      }
+
+      // return sumMap;
+
+      // sum  =
+
+      if (sumMap["_id"] == "Completed") {
+        setState(() {
+          completedSum = sumMap["sum"];
+        });
+      } else if (sumMap['_id'] == 'Cancelled') {
+        cancelledSum = sumMap['sum'];
+        setState(() {});
+      } else if (sumMap['_id'] == 'Progress') {
+        progressSum = sumMap['sum'];
+        setState(() {});
+      }
+      return null;
+
+      // return sum;}
+      //
+      //   sum = getSum();
+      //   // if (response['data']['id'] == 'Cancelled') {
+      //   //   return sum = response['data']['sum'];
+      //   // }
+      // }
+      // return 0;
+    } else {
+      if (mounted) {
+        showSnackBarMessage(context, 'could not update task count', true);
+      }
+    }
   }
 
   Future<void> getAllNewTask() async {
@@ -64,23 +119,25 @@ class _NewTasksScreenState extends State<NewTasksScreen> {
                   typeOfTasks: 'New task',
                 ),
               ),
-              const Expanded(
+              Expanded(
                 child: DashboardItem(
                   // numberOfTasks: completedTaskModel.data?.length ?? 0,
-                  numberOfTasks: 13,
+                  // numberOfTasks: 65,
+                  numberOfTasks: completedSum ?? 0,
 
                   typeOfTasks: 'Completed task',
                 ),
               ),
-              const Expanded(
+              Expanded(
                 child: DashboardItem(
-                  numberOfTasks: 12,
+                  // numberOfTasks: 12,
+                  numberOfTasks: cancelledSum ?? 0,
                   typeOfTasks: 'Cancelled task',
                 ),
               ),
-              const Expanded(
+              Expanded(
                 child: DashboardItem(
-                  numberOfTasks: 12,
+                  numberOfTasks: progressSum ?? 0,
                   typeOfTasks: 'In progress task',
                 ),
               ),
@@ -107,14 +164,21 @@ class _NewTasksScreenState extends State<NewTasksScreen> {
                               'Unknown',
                           type: 'New',
                           onEditPress: () {
-                            showChangedTaskStatus(currentValue: 'New',
+                            showChangedTaskStatus(
+                              currentValue: 'New',
                               newTaskModel.data?[index].sId ?? '',
                               onTaskChangeCompleted: () {
                                 getAllNewTask();
                               },
                             );
                           },
-                          onDeletePress: () {},
+                          onDeletePress: () {
+                            deleteTask(
+                              taskId:
+                                  newTaskModel.data?[index].sId ?? 'Unknown',
+                              onTaskDeleted: () => getAllNewTask(),
+                            );
+                          },
                         );
                       },
                     ),

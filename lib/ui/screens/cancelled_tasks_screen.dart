@@ -3,6 +3,7 @@ import 'package:task_manager_rest_api/data/model/task_model.dart';
 import 'package:task_manager_rest_api/data/network_utils.dart';
 import 'package:task_manager_rest_api/data/urls.dart';
 import 'package:task_manager_rest_api/ui/utils/snackbar_message.dart';
+import 'package:task_manager_rest_api/ui/widgets/delete_task_alartbox.dart';
 import 'package:task_manager_rest_api/ui/widgets/status_change_bottom_sheet.dart';
 
 import '../widgets/screen_background_widget.dart';
@@ -73,7 +74,12 @@ class _CancelledTasksScreenState extends State<CancelledTasksScreen> {
                           },
                         );
                       },
-                      onDeletePress: () {},
+                      onDeletePress: () {
+                        deleteTask(
+                          taskId: cancelledTasks.data?[index].sId ?? 'Unknown',
+                          onTaskDeleted: () => getAllCancelledTasks(),
+                        );
+                      },
                     );
                   },
                 ),
