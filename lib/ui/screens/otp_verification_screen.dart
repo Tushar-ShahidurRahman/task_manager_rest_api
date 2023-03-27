@@ -67,7 +67,15 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               backgroundColor: Colors.transparent,
               enableActiveFill: true,
               // errorAnimationController: errorController,
+              // The code is running properly without the Controller and validator here.
               // controller: textEditingController,
+              // validator: (value) {
+              //   if (value?.isEmpty ?? true) {
+              //     return "Enter the 6 digits pin code sent to your email.";
+              //   } else {
+              //     return null;
+              //   }
+              // },
               onCompleted: (v) {
                 print("Completed");
               },

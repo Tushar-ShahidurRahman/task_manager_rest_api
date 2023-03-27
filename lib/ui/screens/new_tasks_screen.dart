@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:task_manager_rest_api/data/auth_utils.dart';
 import 'package:task_manager_rest_api/data/model/task_model.dart';
+import 'package:task_manager_rest_api/data/model/task_status_count_model.dart';
 import 'package:task_manager_rest_api/data/network_utils.dart';
 import 'package:task_manager_rest_api/ui/utils/snackbar_message.dart';
 import 'package:task_manager_rest_api/ui/widgets/app_elevated_button.dart';
@@ -25,12 +28,17 @@ class _NewTasksScreenState extends State<NewTasksScreen> {
   //I found that inside this TaskModel class a list called data was created automatically, when i
   // created this class using "json to dart". I copied "response" from the postman reply.
   TaskModel newTaskModel = TaskModel();
+  TaskStatusCountModel taskStatusCountModel = TaskStatusCountModel();
 
   // TaskModel completedTaskModel = TaskModel();
   // int? sum;
-  int? completedSum;
-  int? cancelledSum;
-  int? progressSum;
+  // int? completedSum;
+  // int? cancelledSum;
+  // int? progressSum;
+  int? newTaskCount;
+  int? completedTaskCount;
+  int? cancelledTaskCount;
+  int? progressTaskCount;
   bool _inProgress = false;
 
   // int? taskSum;
@@ -42,50 +50,86 @@ class _NewTasksScreenState extends State<NewTasksScreen> {
     getTaskCount();
   }
 
-  Future<int?> getTaskCount() async {
+
+  Future<void> getTaskCount() async {
     final response = await NetworkUtils.getMethod(Urls.getTaskStatusCountUrl);
+
     if (response != null && response['status'] == 'success') {
-      final data = response['data'];
+      // make a model class for task status count data and insert response in it.
+      taskStatusCountModel = TaskStatusCountModel.fromJson(response);
+      // log(taskStatusCountModel.data.toString());
 
-      Map<String, int> sumMap = {};
+      taskStatusCountModel.data?.forEach((element) {
+        if(element.sId == 'New') {
+          newTaskCount = element.sum;
+        } else if(element.sId == 'Completed') {
+          completedTaskCount = element.sum;
+        } else if(element.sId == 'Cancelled') {
+          cancelledTaskCount = element.sum;
+        } else if(element.sId == 'Progress') {
+          progressTaskCount = element.sum;
+        }
+      });
 
-      for (var item in data) {
-        String id = item['_id'];
-        int sum = item['sum'];
-        sumMap[id] = sum;
-      }
-
-      // return sumMap;
-
-      // sum  =
-
-      if (sumMap["_id"] == "Completed") {
-        setState(() {
-          completedSum = sumMap["sum"];
-        });
-      } else if (sumMap['_id'] == 'Cancelled') {
-        cancelledSum = sumMap['sum'];
-        setState(() {});
-      } else if (sumMap['_id'] == 'Progress') {
-        progressSum = sumMap['sum'];
-        setState(() {});
-      }
-      return null;
-
-      // return sum;}
-      //
-      //   sum = getSum();
-      //   // if (response['data']['id'] == 'Cancelled') {
-      //   //   return sum = response['data']['sum'];
-      //   // }
-      // }
-      // return 0;
     } else {
       if (mounted) {
         showSnackBarMessage(context, 'could not update task count', true);
       }
     }
   }
+
+      // Tried and failed
+  // Future<int?> getTaskCount() async {
+  //   final response = await NetworkUtils.getMethod(Urls.getTaskStatusCountUrl);
+  //
+  //   if (response != null && response['status'] == 'success') {
+  //     // make a model class for task status count data.
+  //     taskStatusCountModel = TaskStatusCountModel.fromJson(response);
+  //     log(taskStatusCountModel.data.toString());
+  //     // newTaskCount =  taskStatusCountModel.data?[0].sum ?? 0;
+  //     // completedTaskCount = taskStatusCountModel.data?[1].sum ?? 0;
+  //     // completedTaskCount =  taskStatusCountModel.data?[1].sId as int?;
+  //     // final data = response['data'];
+  //     //
+  //     // Map<String, int> sumMap = {};
+  //     //
+  //     // for (var item in data) {
+  //     //   String id = item['_id'];
+  //     //   int sum = item['sum'];
+  //     //   sumMap[id] = sum;
+  //     // }
+  //     //
+  //     // // return sumMap;
+  //     //
+  //     // // sum  =
+  //     //
+  //     // if (sumMap["_id"] == "Completed") {
+  //     //   setState(() {
+  //     //     completedSum = sumMap["sum"];
+  //     //   });
+  //     // } else if (sumMap['_id'] == 'Cancelled') {
+  //     //   cancelledSum = sumMap['sum'];
+  //     //   setState(() {});
+  //     // } else if (sumMap['_id'] == 'Progress') {
+  //     //   progressSum = sumMap['sum'];
+  //     //   setState(() {});
+  //     // }
+  //     // return null;
+  //
+  //     // return sum;}
+  //     //
+  //     //   sum = getSum();
+  //     //   // if (response['data']['id'] == 'Cancelled') {
+  //     //   //   return sum = response['data']['sum'];
+  //     //   // }
+  //     // }
+  //     // return 0;
+  //   } else {
+  //     if (mounted) {
+  //       showSnackBarMessage(context, 'could not update task count', true);
+  //     }
+  //   }
+  // }
 
   Future<void> getAllNewTask() async {
     _inProgress = true;
@@ -123,7 +167,7 @@ class _NewTasksScreenState extends State<NewTasksScreen> {
                 child: DashboardItem(
                   // numberOfTasks: completedTaskModel.data?.length ?? 0,
                   // numberOfTasks: 65,
-                  numberOfTasks: completedSum ?? 0,
+                  numberOfTasks: completedTaskCount ?? 0,
 
                   typeOfTasks: 'Completed task',
                 ),
@@ -131,13 +175,13 @@ class _NewTasksScreenState extends State<NewTasksScreen> {
               Expanded(
                 child: DashboardItem(
                   // numberOfTasks: 12,
-                  numberOfTasks: cancelledSum ?? 0,
+                  numberOfTasks: cancelledTaskCount ?? 0,
                   typeOfTasks: 'Cancelled task',
                 ),
               ),
               Expanded(
                 child: DashboardItem(
-                  numberOfTasks: progressSum ?? 0,
+                  numberOfTasks: progressTaskCount ?? 0,
                   typeOfTasks: 'In progress task',
                 ),
               ),
