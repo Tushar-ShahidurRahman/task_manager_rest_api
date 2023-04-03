@@ -11,12 +11,12 @@ class AuthUtils {
       required String userMobile,
       required String userToken}) async {
     SharedPreferences sPref = await SharedPreferences.getInstance();
-    await sPref.setString('email', 'userEmail');
-    await sPref.setString('firstName ', 'userFirstName');
-    await sPref.setString('lastName', 'userLastName');
-    await sPref.setString('photo', 'userProfilePic');
-    await sPref.setString('mobile', 'userMobile');
-    await sPref.setString('token', 'userToken');
+    await sPref.setString('email', userEmail);
+    await sPref.setString('firstName ', userFirstName);
+    await sPref.setString('lastName', userLastName);
+    await sPref.setString('photo', userProfilePic);
+    await sPref.setString('mobile', userMobile);
+    await sPref.setString('token', userToken);
 
     email = userEmail;
     firstName = userFirstName;
